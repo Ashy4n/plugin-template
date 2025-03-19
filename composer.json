@@ -1,0 +1,29 @@
+{
+  "name": "ashy4n/plugin-template",
+  "version": "0.0.1",
+  "description": "A WordPress plugin skeleton (boilerplate) for use with composer create-project.",
+  "type": "project",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Mateusz Dworowy",
+      "email": "mateuszdworowy@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=7.4"
+  },
+  "autoload": {
+    "psr-4": {
+      "Template\\": "src",
+      "Ashy4n\\Core\\": "core"
+    }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "scripts": {
+    "post-create-project-cmd": [
+      "Ashy4n\\Core\\Scripts\\Setup::run"
+    ]
+  }
+}
