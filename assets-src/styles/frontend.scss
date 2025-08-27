@@ -1,0 +1,118 @@
+@import 'variables';
+
+.plugin-frontend {
+  font-family: $font-family;
+  color: $text-color;
+  line-height: $line-height-base;
+
+  &__container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 $spacing-md;
+  }
+
+  &__header {
+    text-align: center;
+    margin-bottom: $spacing-xl;
+
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: $primary-color;
+      margin-bottom: $spacing-sm;
+    }
+
+    p {
+      font-size: 1.1rem;
+      color: lighten($text-color, 20%);
+      margin: 0;
+    }
+  }
+
+  &__content {
+    background: white;
+    padding: $spacing-xl;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: $spacing-xl;
+  }
+
+  &__card {
+    background: white;
+    border: 1px solid $border-color;
+    border-radius: 6px;
+    padding: $spacing-lg;
+    margin-bottom: $spacing-md;
+    transition: all 0.3s ease;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    h3 {
+      color: $primary-color;
+      margin-bottom: $spacing-sm;
+      font-size: 1.25rem;
+    }
+
+    p {
+      margin-bottom: $spacing-md;
+      color: lighten($text-color, 10%);
+    }
+  }
+
+  &__button {
+    display: inline-block;
+    padding: $spacing-sm $spacing-lg;
+    background: $primary-color;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: $secondary-color;
+      transform: translateY(-1px);
+    }
+
+    &--secondary {
+      background: $light-gray;
+      color: $text-color;
+
+      &:hover {
+        background: darken($light-gray, 10%);
+      }
+    }
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: $spacing-lg;
+    margin-bottom: $spacing-xl;
+  }
+
+  &__footer {
+    text-align: center;
+    padding: $spacing-xl 0;
+    border-top: 1px solid $border-color;
+    color: lighten($text-color, 30%);
+  }
+
+  // Responsive design
+  @media (max-width: $breakpoint-md) {
+    &__header h1 {
+      font-size: 2rem;
+    }
+
+    &__content {
+      padding: $spacing-lg;
+    }
+
+    &__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+}

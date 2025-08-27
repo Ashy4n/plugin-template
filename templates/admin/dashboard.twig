@@ -1,0 +1,71 @@
+{% extends "admin/layout.twig" %}
+
+{% block title %}{{ plugin.name }} - Dashboard{% endblock %}
+
+{% block content %}
+<div class="plugin-admin">
+    <div class="plugin-admin__header">
+        <h1>{{ plugin.name }} Dashboard</h1>
+        <p>Welcome to your plugin administration panel</p>
+    </div>
+
+    <div class="plugin-admin__content">
+        <div class="plugin-admin__stats">
+            <h2>Plugin Statistics</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Version</h3>
+                    <p>{{ plugin.version }}</p>
+                </div>
+                <div class="stat-card">
+                    <h3>PHP Version</h3>
+                    <p>{{ php_version }}</p>
+                </div>
+                <div class="stat-card">
+                    <h3>WordPress Version</h3>
+                    <p>{{ wp_version }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="plugin-admin__settings">
+            <h2>Plugin Settings</h2>
+            <form class="plugin-admin__form" method="post" action="">
+                {{ nonce_field | raw }}
+                
+                <div class="form-group">
+                    <label for="setting1">Setting 1</label>
+                    <input type="text" id="setting1" name="setting1" value="{{ settings.setting1 | default('') }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="setting2">Setting 2</label>
+                    <select id="setting2" name="setting2">
+                        <option value="">Select an option</option>
+                        <option value="option1" {{ settings.setting2 == 'option1' ? 'selected' : '' }}>Option 1</option>
+                        <option value="option2" {{ settings.setting2 == 'option2' ? 'selected' : '' }}>Option 2</option>
+                        <option value="option3" {{ settings.setting2 == 'option3' ? 'selected' : '' }}>Option 3</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="setting3">Setting 3</label>
+                    <textarea id="setting3" name="setting3" rows="4">{{ settings.setting3 | default('') }}</textarea>
+                </div>
+
+                <button type="submit" class="btn btn--primary">Save Settings</button>
+            </form>
+        </div>
+
+        {% if notices %}
+            <div class="plugin-admin__notices">
+                {% for notice in notices %}
+                    <div class="plugin-admin__notice plugin-admin__notice--{{ notice.type }}">
+                        {{ notice.message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

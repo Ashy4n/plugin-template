@@ -1,0 +1,147 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  php-tests:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        php-version: [8.0, 8.1, 8.2, 8.3]
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ matrix.php-version }}
+        extensions: mbstring, intl, xml, curl, zip
+        coverage: xdebug
+    
+    - name: Validate composer.json
+      run: composer validate --strict
+    
+    - name: Cache Composer packages
+      id: composer-cache
+      uses: actions/cache@v3
+      with:
+        path: vendor
+        key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-php-
+    
+    - name: Install dependencies
+      run: composer install --prefer-dist --no-progress
+    
+    - name: Run PHPStan
+      run: composer run analyse
+    
+    - name: Run PHP CodeSniffer
+      run: composer run cs
+    
+    - name: Run PHPUnit tests
+      run: composer test
+    
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./coverage.xml
+        flags: unittests
+        name: codecov-umbrella
+        fail_ci_if_error: true
+
+  frontend-tests:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [16, 18, 20]
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Run TypeScript type check
+      run: npm run type-check
+    
+    - name: Run ESLint
+      run: npm run lint
+    
+    - name: Build frontend assets
+      run: npm run build
+    
+    - name: Test build output
+      run: |
+        if [ ! -f "assets/admin.js" ]; then
+          echo "Admin JS file not found"
+          exit 1
+        fi
+        if [ ! -f "assets/frontend.js" ]; then
+          echo "Frontend JS file not found"
+          exit 1
+        fi
+        if [ ! -f "assets/admin.css" ]; then
+          echo "Admin CSS file not found"
+          exit 1
+        fi
+        if [ ! -f "assets/frontend.css" ]; then
+          echo "Frontend CSS file not found"
+          exit 1
+        fi
+
+  build-test:
+    runs-on: ubuntu-latest
+    needs: [php-tests, frontend-tests]
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: 8.2
+        extensions: mbstring, intl, xml, curl, zip
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 18
+        cache: 'npm'
+    
+    - name: Install PHP dependencies
+      run: composer install --prefer-dist --no-dev --optimize-autoloader
+    
+    - name: Install Node.js dependencies
+      run: npm ci
+    
+    - name: Build frontend assets
+      run: npm run build
+    
+    - name: Build PHP with scoped dependencies
+      run: composer run php-scoper
+    
+    - name: Test build output
+      run: |
+        if [ ! -d "build" ]; then
+          echo "Build directory not found"
+          exit 1
+        fi
+        if [ ! -f "build/vendor/autoload.php" ]; then
+          echo "Scoped autoloader not found"
+          exit 1
+        fi
+        echo "Build completed successfully"

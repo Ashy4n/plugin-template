@@ -1,0 +1,14 @@
+parameters:
+    level: 8
+    paths:
+        - src
+        - core
+    excludePaths:
+        - tests
+    checkMissingIterableValueType: false
+    checkGenericClassInNonGenericObjectType: false
+    ignoreErrors:
+        - '#Call to an undefined method [a-zA-Z0-9\\_]+::get\(\)#'
+        - '#Access to an undefined property [a-zA-Z0-9\\_]+::\$[a-zA-Z0-9\\_]+#'
+    bootstrapFiles:
+        - tests/bootstrap.php

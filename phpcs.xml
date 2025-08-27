@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<ruleset name="Plugin Template">
+    <description>PHP CodeSniffer rules for WordPress Plugin Template</description>
+
+    <file>src</file>
+    <file>core</file>
+    <file>tests</file>
+
+    <exclude-pattern>vendor/*</exclude-pattern>
+    <exclude-pattern>build/*</exclude-pattern>
+    <exclude-pattern>node_modules/*</exclude-pattern>
+
+    <rule ref="PSR12"/>
+    <rule ref="PHPCompatibility"/>
+
+    <rule ref="WordPress">
+        <exclude name="WordPress.Files.FileName.InvalidClassFileName"/>
+        <exclude name="WordPress.Files.FileName.NotHyphenatedLowercase"/>
+        <exclude name="WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound"/>
+        <exclude name="WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound"/>
+        <exclude name="WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedClassFound"/>
+        <exclude name="WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedConstantFound"/>
+        <exclude name="WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound"/>
+    </rule>
+
+    <arg name="extensions" value="php"/>
+    <arg name="parallel" value="75"/>
+    <arg name="colors"/>
+    <arg value="n"/>
+</ruleset>

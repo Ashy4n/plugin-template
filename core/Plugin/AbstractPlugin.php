@@ -1,10 +1,10 @@
 <?php
 
-namespace plugin;
+namespace Ashy4n\Core\Plugin;
 
-use entity\PluginInfo;
+use Ashy4n\Core\Objects\PluginInfo;
 
-class AbstractPlugin {
+abstract class AbstractPlugin {
 
 	protected PluginInfo $plugin_info;
 
